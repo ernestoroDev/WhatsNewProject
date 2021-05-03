@@ -2,6 +2,8 @@ package com.example.whatsnewproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,8 +46,10 @@ public class principal extends AppCompatActivity {
         analytics.logEvent("InitScreen",bundle);
 
         Setup();
-    }
 
+        login();
+
+    }
 
     //Setup
     private void Setup(){
@@ -54,7 +58,7 @@ public class principal extends AppCompatActivity {
         FirebaseUser esteUsuario = auth.getCurrentUser();
 
 
-        bt_login.setOnClickListener(new View.OnClickListener() {
+        bt_registrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)  {
                     auth.createUserWithEmailAndPassword(text_email.getText().toString(),text_contra.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -63,6 +67,7 @@ public class principal extends AppCompatActivity {
 
                             if(task.isSuccessful()){
                                 Log.w("TAG","Creado correctamente");
+
 
                             }else{
                                 Log.w("TAG","Error al crear el usuario con contraseña",task.getException());
@@ -73,8 +78,25 @@ public class principal extends AppCompatActivity {
                     });
             };
         });
+    }
 
+
+    private void login(){
+
+        bt_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Check if user is signed in (non-null) and update UI accordingly.
+                FirebaseUser currentUser = auth.getCurrentUser();
+                if(currentUser != null){
+                    Intent ventana2 = new Intent(principal.this,ventana2.class);
+                    startActivity(ventana2);
+                    finish();
+                }
+            }
+        });
 
 
     }
+
 }
